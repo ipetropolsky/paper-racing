@@ -1,7 +1,6 @@
-import { AnyAction, Dispatch } from 'redux';
+import { AnyAction } from 'redux';
 
-import { defaultPosition } from '../constants';
-import { calculateTrack, FieldPoint, PathPart } from '../utils';
+import { calculateTrack, FieldPoint, getPoint, getVector, TrackPart } from '../utils';
 import { log } from '../debug';
 
 const MOVE = 'MOVE';
@@ -11,8 +10,10 @@ const RESET = 'RESET';
 
 interface MoveAction extends AnyAction {
     type: typeof MOVE;
-    payload: FieldPoint;
-    doNotClearFuture?: boolean;
+    payload: { to: FieldPoint };
+    meta?: {
+        doNotClearFuture?: boolean;
+    };
 }
 
 interface UndoAction extends AnyAction {
@@ -21,7 +22,6 @@ interface UndoAction extends AnyAction {
 
 interface RedoAction extends AnyAction {
     type: typeof REDO;
-    payload: { dispatch: Dispatch };
 }
 
 interface ResetAction extends AnyAction {
@@ -30,87 +30,81 @@ interface ResetAction extends AnyAction {
 
 type Actions = MoveAction | UndoAction | RedoAction | ResetAction;
 
-interface TrackPart {
-    from: PathPart;
-    to: PathPart;
+interface State {
+    error: FieldPoint | null;
+    current: TrackPart;
+    track: TrackPart[];
+    future: TrackPart[];
 }
 
-interface State {
-    current: PathPart;
-    error: FieldPoint | null;
-    history: Actions[];
-    future: Actions[];
-    track: TrackPart[];
-}
+const initialPosition = getPoint(0, 0);
+const initialVector = getVector(0, 0);
 
 const initialState: State = {
-    current: {
-        position: defaultPosition,
-        vector: { dx: 0, dy: 0 },
-        angle: Math.PI / 4,
-        speed: 0,
-        exactSpeed: 0,
-    },
     error: null,
-    history: [],
-    future: [],
+    current: { ...calculateTrack(initialPosition, initialVector), angle: Math.PI / 4 },
     track: [],
+    future: [],
 };
 
-export const moveAction = ({ left, top }: FieldPoint): MoveAction => ({ type: MOVE, payload: { left, top } });
+export const moveAction = (to: FieldPoint): MoveAction => ({ type: MOVE, payload: { to } });
 export const undoAction = (): UndoAction => ({ type: UNDO });
-export const redoAction = (dispatch: Dispatch): RedoAction => ({ type: REDO, payload: { dispatch } });
+export const redoAction = (): RedoAction => ({ type: REDO });
 export const resetAction = (): ResetAction => ({ type: RESET });
 
 const makeMoveState = (state: State, action: MoveAction): State => {
-    const { left, top } = action.payload;
-    const { current } = state;
-    const next = calculateTrack(current.position, { left, top });
-    log('Move', next, 'from', current);
-    if (Math.abs(next.vector.dx - current.vector.dx) > 1 || Math.abs(next.vector.dy - current.vector.dy) > 1) {
-        return { ...state, error: { ...next.position } };
+    const { track, current, future } = state;
+    const [fromX, fromY] = current.from;
+    const [toX, toY] = action.payload.to;
+    const vector = getVector(toX - fromX, toY - fromY);
+    const move = calculateTrack(current.from, vector);
+    const nextMove = calculateTrack(action.payload.to, vector);
+    log('Move', move, {
+        ...state,
+        error: null,
+        track: track.concat({ ...move }),
+        current: nextMove,
+        future: action.meta?.doNotClearFuture ? future : [],
+    });
+    if (Math.abs(move.vector[0] - current.vector[0]) > 1 || Math.abs(move.vector[1] - current.vector[1]) > 1) {
+        return { ...state, error: { ...move.to } };
     }
     return {
         ...state,
         error: null,
-        current: next,
-        history: state.history.concat(action),
-        future: action.doNotClearFuture ? state.future : [],
-        track: state.track.concat({
-            from: current,
-            to: next,
-        }),
+        track: track.concat({ ...move }),
+        current: nextMove,
+        future: action.meta?.doNotClearFuture ? future : [],
     };
 };
 
 const makeUndoState = (state: State) => {
-    if (state.history.length) {
-        const lastAction = state.history[state.history.length - 1];
-        log('Undo', lastAction);
-        if (lastAction.type === MOVE) {
-            const { from } = state.track[state.track.length - 1];
-            return {
-                ...state,
-                error: null,
-                current: { ...from },
-                history: state.history.slice(0, state.history.length - 1),
-                future: [lastAction, ...state.future],
-                track: state.track.slice(0, state.track.length - 1),
-            };
-        }
+    const { track, current, future } = state;
+    if (track.length) {
+        log('Undo', current);
+        const lastMove = track[track.length - 1];
+        return {
+            ...state,
+            error: null,
+            track: track.slice(0, track.length - 1),
+            current: { ...lastMove },
+            future: [{ ...current }, ...future],
+        };
     }
     return state;
 };
 
-const makeRedoState = (state: State, action: RedoAction) => {
-    if (state.future.length) {
-        const { dispatch } = action.payload;
-        const nextAction = state.future[0];
-        log('Redo', nextAction);
-        dispatch({ ...nextAction, doNotClearFuture: true });
+const makeRedoState = (state: State) => {
+    const { track, current, future } = state;
+    if (future.length) {
+        const nextMove = future[0];
+        log('Redo', nextMove);
         return {
             ...state,
-            future: state.future.slice(1),
+            error: null,
+            track: track.concat({ ...current }),
+            current: { ...nextMove },
+            future: future.slice(1),
         };
     }
     return state;
@@ -127,7 +121,7 @@ const reducer = (state: State = initialState, action: Actions): State => {
         case UNDO:
             return makeUndoState(state);
         case REDO:
-            return makeRedoState(state, action);
+            return makeRedoState(state);
         case RESET:
             return makeResetState();
     }

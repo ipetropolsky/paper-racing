@@ -26,11 +26,6 @@ export const defaultRect: BoundingClientRect = {
     y: 0,
 };
 
-export const defaultPosition = {
-    left: 0,
-    top: 0,
-};
-
 export interface Goal {
     id: string;
     left: number;

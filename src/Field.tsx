@@ -9,7 +9,7 @@ import {
     BoundingClientRect,
 } from './constants';
 import Point from './Point';
-import { FieldPoint, getBoundingClientRect, getCellByCoords } from './utils';
+import { FieldPoint, getBoundingClientRect, getPointByCoords } from './utils';
 
 import './Field.css';
 import usePlayer from './usePlayer';
@@ -62,16 +62,16 @@ const Field: VFC = () => {
 
     const onClick = useCallback(
         ({ pageX, pageY }) => {
-            const cell = getCellByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
-            movePlayerOne(cell);
+            const point = getPointByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
+            movePlayerOne(point);
         },
         [fieldMetrics, movePlayerOne]
     );
 
     const onMouseMove = useCallback<MouseEventHandler>(
         ({ pageX, pageY }) => {
-            const cell = getCellByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
-            setCursor(cell);
+            const point = getPointByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
+            setCursor(point);
         },
         [fieldMetrics]
     );
@@ -79,11 +79,11 @@ const Field: VFC = () => {
     return (
         <div style={{ position: 'relative', margin: 30 }}>
             <div className="field" ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
-                {cursor && <Point left={cursor.left} top={cursor.top} color="#ddd" />}
+                {cursor && <Point x={cursor[0]} y={cursor[1]} color="#ddd" />}
                 {goals.map(({ id, left, top }) => (
-                    <Point key={id} left={left} top={top} color="gold" />
+                    <Point key={id} x={left} y={top} color="gold" />
                 ))}
-                {error && <Point left={error.left} top={error.top} color="red" />}
+                {error && <Point x={error[0]} y={error[1]} color="red" />}
                 {renderPlayerOne()}
             </div>
         </div>

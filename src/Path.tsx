@@ -5,21 +5,19 @@ import { CELL_SIZE } from './constants';
 import './Path.css';
 
 interface PathProps {
-    position: {
-        left: number;
-        top: number;
-    };
+    x: number;
+    y: number;
     angle: number;
-    exactSpeed: number;
+    distance: number;
     color: string;
     last?: boolean;
 }
 
-const Path: VFC<PathProps> = ({ position: { left, top }, angle, exactSpeed, color, last = false }) => {
+const Path: VFC<PathProps> = ({ x, y, angle, distance, color, last = false }) => {
     const style = {
-        left: left * CELL_SIZE,
-        top: top * CELL_SIZE,
-        width: exactSpeed * CELL_SIZE,
+        left: x * CELL_SIZE,
+        top: y * CELL_SIZE,
+        width: distance * CELL_SIZE,
         transform: `rotate(${angle}rad`,
         borderColor: color,
     };

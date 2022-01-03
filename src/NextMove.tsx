@@ -5,14 +5,14 @@ import { CELL_SIZE } from './constants';
 import './NextMove.css';
 
 interface NextMoveProps {
-    left: number;
-    top: number;
+    x: number;
+    y: number;
 }
 
-const NextMove: VFC<NextMoveProps> = ({ left, top }) => {
+const NextMove: VFC<NextMoveProps> = ({ x, y }) => {
     const style = {
-        left: left * CELL_SIZE,
-        top: top * CELL_SIZE,
+        left: x * CELL_SIZE,
+        top: y * CELL_SIZE,
     };
     return <div className="next-move" style={style} />;
 };
