@@ -1,9 +1,10 @@
 .path {
     height: 0;
     position: absolute;
-    transform-origin: top left;
+    transform-origin: left top;
     z-index: 20;
     pointer-events: none;
+    margin: var(--half-cell-size) 0 0 var(--half-cell-size);
 }
 
 .path_last {
@@ -20,7 +21,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-50%, calc(-50% + 1px));
+    transform: translate(-50%, -50%);
 }
 
 .path_last:before {
@@ -31,7 +32,7 @@
 
 .path:after {
     content: '';
-    border-top: 2px dashed;
+    border-top: var(--path-line-width) dashed;
     border-color: inherit;
     background: inherit;
     width: 100%;

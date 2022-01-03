@@ -17,8 +17,8 @@ interface PathProps {
 
 const Path: VFC<PathProps> = ({ position: { left, top }, angle, exactSpeed, color, last = false }) => {
     const style = {
-        left: left * CELL_SIZE + CELL_SIZE / 2,
-        top: top * CELL_SIZE + CELL_SIZE / 2,
+        left: left * CELL_SIZE,
+        top: top * CELL_SIZE,
         width: exactSpeed * CELL_SIZE,
         transform: `rotate(${angle}rad`,
         borderColor: color,
