@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CELL_SIZE, FIELD_WIDTH_IN_CELLS } from './constants';
 import Path from './Path';
 import Car from './Car';
-import { FieldPoint } from './utils';
+import { FieldPoint, TrackPart } from './utils';
 import NextMove from './NextMove';
 import { moveAction, undoAction, redoAction, resetAction } from './model/player';
 
@@ -14,7 +14,7 @@ type Redo = () => void;
 type Reset = () => void;
 type Render = () => ReactNode;
 
-const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, FieldPoint | null] => {
+const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, TrackPart, FieldPoint | null] => {
     const dispatch = useDispatch();
     const { error, track, current } = useSelector((state) => state.player);
 
@@ -56,7 +56,7 @@ const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, FieldPoin
             </div>
         </>
     );
-    return [moveTo, render, undo, redo, reset, error];
+    return [moveTo, render, undo, redo, reset, current, error];
 };
 
 export default usePlayer;

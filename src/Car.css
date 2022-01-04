@@ -3,4 +3,5 @@
     height: calc(var(--cell-size) - 2px);
     position: absolute;
     z-index: 100;
+    transition: left 0.5s ease, top 0.5s ease, transform 0.5s ease;
 }

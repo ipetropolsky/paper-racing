@@ -26,7 +26,8 @@ const Field: VFC = () => {
     const fieldRef = useRef<HTMLDivElement>(null);
     const [fieldMetrics, setFieldMetrics] = useState<BoundingClientRect>(defaultRect);
     const [cursor, setCursor] = useState<FieldPoint | null>(null);
-    const [movePlayerOne, renderPlayerOne, undoPlayerOne, redoPlayerOne, resetPlayerOne, error] = usePlayer('#4d4dff');
+    const [movePlayerOne, renderPlayerOne, undoPlayerOne, redoPlayerOne, resetPlayerOne, positionPlayerOne, error] =
+        usePlayer('#4d4dff');
 
     useEffect(() => {
         const resizeHandler = () => {
@@ -81,9 +82,15 @@ const Field: VFC = () => {
             <div className="field" ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
                 {cursor && <Point x={cursor[0]} y={cursor[1]} color="#ddd" />}
                 {goals.map(({ id, left, top }) => (
-                    <Point key={id} x={left} y={top} color="gold" />
+                    <Point
+                        key={id}
+                        x={left}
+                        y={top}
+                        color="gold"
+                        collected={!!cursor && left === positionPlayerOne.from[0] && top === positionPlayerOne.from[1]}
+                    />
                 ))}
-                {error && <Point x={error[0]} y={error[1]} color="red" />}
+                {error && <Point x={error[0]} y={error[1]} color="red" collected key={`${error[0]}${error[1]}`} />}
                 {renderPlayerOne()}
             </div>
         </div>

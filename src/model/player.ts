@@ -57,15 +57,12 @@ const makeMoveState = (state: State, action: MoveAction): State => {
     const [fromX, fromY] = current.from;
     const [toX, toY] = action.payload.to;
     const vector = getVector(toX - fromX, toY - fromY);
-    const move = calculateTrack(current.from, vector);
-    const nextMove = calculateTrack(action.payload.to, vector);
-    log('Move', move, {
-        ...state,
-        error: null,
-        track: track.concat({ ...move }),
-        current: nextMove,
-        future: action.meta?.doNotClearFuture ? future : [],
-    });
+    const move = calculateTrack(current.from, vector, current.angle);
+    const nextMove = calculateTrack(action.payload.to, vector, move.angle);
+    if (fromX === toX && fromY === toY) {
+        return state;
+    }
+    log('Move', move);
     if (Math.abs(move.vector[0] - current.vector[0]) > 1 || Math.abs(move.vector[1] - current.vector[1]) > 1) {
         return { ...state, error: { ...move.to } };
     }

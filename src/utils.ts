@@ -36,13 +36,16 @@ export const getPointByCoords = (left: number, top: number): FieldPoint => {
     return getSafePoint(Math.floor(left / CELL_SIZE), Math.floor(top / CELL_SIZE));
 };
 
-export const calculateTrack = (from: FieldPoint, vector: FieldVector): TrackPart => {
+export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle = 0): TrackPart => {
     const [x, y] = from;
     const [dx, dy] = vector;
     const to = getPoint(x + dx, y + dy);
     const speed = Math.max(Math.abs(dx), Math.abs(dy));
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const angle = Math.atan(dy / dx) + (dx < 0 ? Math.PI : 0);
+    let angle = Math.atan(dy / dx) + (dx < 0 ? Math.PI : 0);
+    while (Math.abs(lastAngle - angle) > Math.PI) {
+        angle += (lastAngle > angle ? 1 : -1) * 2 * Math.PI;
+    }
     return {
         from,
         to,
