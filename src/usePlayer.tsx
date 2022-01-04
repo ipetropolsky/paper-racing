@@ -44,9 +44,27 @@ const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, FieldPoin
         <>
             {current.from && <Car left={fromX} top={fromY} angle={current.angle} color={color} />}
             {track.map(({ from: [x, y], angle, distance }, index) => {
-                return <Path key={index} x={x} y={y} angle={angle} distance={distance} color={color} />;
+                return (
+                    <Path
+                        key={index}
+                        x={x}
+                        y={y}
+                        angle={angle}
+                        distance={distance}
+                        color={color}
+                        actuality={1 - (track.length - index) / track.length}
+                    />
+                );
             })}
-            <Path x={fromX} y={fromY} angle={current.angle} distance={current.distance} color="#eee" last />
+            <Path
+                x={fromX}
+                y={fromY}
+                angle={current.angle}
+                distance={current.distance}
+                color="#eee"
+                last
+                actuality={1}
+            />
             <NextMove x={toX} y={toY} />
             <div className="score" style={{ left: FIELD_WIDTH_IN_CELLS * CELL_SIZE }}>
                 <p>Ходы: {track.length}</p>
