@@ -1,4 +1,4 @@
-import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS } from './constants';
+import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, goals } from './constants';
 
 export type FieldPoint = [number, number];
 export type FieldVector = [number, number];
@@ -10,6 +10,7 @@ export interface TrackPart {
     angle: number;
     speed: number;
     distance: number;
+    goalId: string | null;
 }
 
 export const getBoundingClientRect = (element: Element): BoundingClientRect => {
@@ -46,6 +47,7 @@ export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle 
     while (Math.abs(lastAngle - angle) > Math.PI) {
         angle += (lastAngle > angle ? 1 : -1) * 2 * Math.PI;
     }
+    const goalId = goals.find(({ left, top }) => left === to[0] && top === to[1])?.id || null;
     return {
         from,
         to,
@@ -53,5 +55,6 @@ export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle 
         angle,
         speed,
         distance,
+        goalId,
     };
 };

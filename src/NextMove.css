@@ -1,11 +1,25 @@
 .next-move {
     position: absolute;
-    left: 100%;
-    top: 100%;
-    width: calc(3 * var(--cell-size) - var(--border-width));
-    height: calc(3 * var(--cell-size) - var(--border-width));
-    transform: translate(var(--cell-size-negative), var(--cell-size-negative));
-    background: repeating-radial-gradient(circle, #ccc, #ccc 10px, transparent 10px, transparent 23px);
+    width: calc(5 * var(--point-size));
+    height: calc(5 * var(--point-size));
+    transform: translate(
+        calc(-2.5 * var(--point-size) + var(--half-cell-size)),
+        calc(-2.5 * var(--point-size) + var(--half-cell-size))
+    );
+    background: radial-gradient(
+        circle,
+        #ccc 0%,
+        #ccc var(--half-point-size),
+        transparent var(--half-point-size),
+        transparent var(--point-size),
+        #ccc var(--point-size),
+        #ccc calc(var(--point-size) + var(--half-point-size)),
+        transparent calc(var(--point-size) + var(--half-point-size)),
+        transparent calc(2 * var(--point-size)),
+        #ccc calc(2 * var(--point-size)),
+        #ccc calc(2 * var(--point-size) + var(--half-point-size)),
+        transparent calc(2 * var(--point-size) + var(--half-point-size))
+    );
     opacity: 0.3;
     z-index: 30;
     pointer-events: none;

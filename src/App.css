@@ -6,8 +6,12 @@
     --border-width-negative: calc(-1 * var(--border-width));
     --half-cell-size: calc((var(--cell-size) - var(--border-width)) / 2);
     --point-size: 20px;
+    --half-point-size: calc(var(--point-size) / 2);
     --point-color: #eee;
+    --point-text-color: #795548;
+    --point-border-color: #ffa000;
     --point-offset: calc(var(--half-cell-size) - var(--point-size) / 2);
     --path-dot-radius: 6px;
     --path-line-width: 2px;
+    --move-duration: 0.5s;
 }

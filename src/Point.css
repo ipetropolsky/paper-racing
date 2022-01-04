@@ -8,7 +8,7 @@
     margin: var(--point-offset) 0 0 var(--point-offset);
     transform: scale(1);
     pointer-events: none;
-    color: brown;
+    color: var(--point-text-color);
     text-align: center;
     font-size: 14px;
     font-weight: bold;
@@ -16,17 +16,28 @@
 }
 
 .point_collected {
+    outline: 2px solid var(--point-border-color);
+}
+
+.point_static {
+    position: static;
+    display: inline-block;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+}
+
+.point_in-action {
     animation-name: point;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(0.34, 0.86, 0.66, 0.22);
     animation-iteration-count: 1;
 }
 
-.point:before {
+.point:after {
     content: '';
     position: absolute;
     visibility: hidden;
-    opacity: 1;
+    opacity: 0.5;
     width: 100%;
     height: 100%;
     left: 50%;
@@ -35,18 +46,18 @@
     transform: translate(-50%, -50%);
     transition: transform 0.5s ease, opacity 0.5s ease;
     border-radius: 100%;
-    border: 2px solid;
-    border-color: inherit;
+    background-image: radial-gradient(circle, currentColor, currentColor 50%, transparent);
     pointer-events: none;
 }
 
-.point_collected:before {
+.point_in-action:after {
     visibility: visible;
     opacity: 0;
+    transform: translate(-50%, -50%) scale(4);
 }
 
-.point_collected:before {
-    transform: translate(-50%, -50%) scale(3);
+.point_goal.point_in-action:after {
+    transform: translate(-50%, -50%) scale(4);
 }
 
 @keyframes point {
