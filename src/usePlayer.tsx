@@ -46,7 +46,7 @@ const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, TrackPart
             {track.map(({ from: [x, y], angle, distance }, index) => {
                 return <Path key={index} x={x} y={y} angle={angle} distance={distance} color={color} />;
             })}
-            <Path x={fromX} y={fromY} angle={current.angle} distance={current.distance} color="#eee" last />
+            <Path x={fromX} y={fromY} angle={current.angle} distance={current.distance} color="#ddd" last />
             <NextMove x={toX} y={toY} />
             <div className="score" style={{ left: FIELD_WIDTH_IN_CELLS * CELL_SIZE }}>
                 <p>Ходы: {track.length}</p>
