@@ -81,14 +81,16 @@ const Field: VFC = () => {
         <div style={{ position: 'relative', margin: 30 }}>
             <div className="field" ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
                 {cursor && <Point x={cursor[0]} y={cursor[1]} color="#ddd" />}
-                {goals.map(({ id, left, top }) => (
+                {goals.map(({ id, left, top, number }) => (
                     <Point
                         key={id}
                         x={left}
                         y={top}
                         color="gold"
                         collected={!!cursor && left === positionPlayerOne.from[0] && top === positionPlayerOne.from[1]}
-                    />
+                    >
+                        {number}
+                    </Point>
                 ))}
                 {error && <Point x={error[0]} y={error[1]} color="red" collected key={`${error[0]}${error[1]}`} />}
                 {renderPlayerOne()}

@@ -1,4 +1,4 @@
-import { VFC, useEffect, useState } from 'react';
+import { VFC, useEffect, useState, ReactNode } from 'react';
 
 import { CELL_SIZE } from './constants';
 
@@ -9,9 +9,10 @@ interface PointProps {
     y: number;
     color?: string;
     collected?: boolean;
+    children?: ReactNode;
 }
 
-const Point: VFC<PointProps> = ({ x, y, color = null, collected = false }) => {
+const Point: VFC<PointProps> = ({ x, y, color = null, collected = false, children }) => {
     const [collectedClass, setCollectedClass] = useState(false);
     useEffect(() => {
         setCollectedClass(collected);
@@ -21,7 +22,11 @@ const Point: VFC<PointProps> = ({ x, y, color = null, collected = false }) => {
         top: y * CELL_SIZE,
         ...(color ? { backgroundColor: color, borderColor: color } : {}),
     };
-    return <div className={`point ${collectedClass ? 'point_collected' : ''}`} style={style} />;
+    return (
+        <div className={`point ${collectedClass ? 'point_collected' : ''}`} style={style}>
+            {children}
+        </div>
+    );
 };
 
 export default Point;

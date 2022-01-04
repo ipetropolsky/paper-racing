@@ -8,6 +8,11 @@
     margin: var(--point-offset) 0 0 var(--point-offset);
     transform: scale(1);
     pointer-events: none;
+    color: brown;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: var(--point-size);
 }
 
 .point_collected {
