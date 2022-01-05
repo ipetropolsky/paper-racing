@@ -39,15 +39,17 @@ const Field: VFC = () => {
     ] = usePlayer('#4d4dff');
 
     useEffect(() => {
-        const resizeHandler = () => {
+        const handler = () => {
             if (fieldRef.current) {
                 setFieldMetrics(getBoundingClientRect(fieldRef.current));
             }
         };
-        window.addEventListener('resize', resizeHandler);
-        resizeHandler();
+        window.addEventListener('resize', handler);
+        window.addEventListener('scroll', handler);
+        handler();
         return () => {
-            window.removeEventListener('resize', resizeHandler);
+            window.removeEventListener('resize', handler);
+            window.removeEventListener('scroll', handler);
         };
     }, []);
 
@@ -72,7 +74,10 @@ const Field: VFC = () => {
 
     const onClick = useCallback(
         ({ pageX, pageY }) => {
-            const point = getPointByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
+            const point = getPointByCoords(
+                pageX - fieldMetrics.left - document.documentElement.scrollLeft,
+                pageY - fieldMetrics.top - document.documentElement.scrollTop
+            );
             movePlayerOne(point);
         },
         [fieldMetrics, movePlayerOne]
@@ -80,7 +85,10 @@ const Field: VFC = () => {
 
     const onMouseMove = useCallback<MouseEventHandler>(
         ({ pageX, pageY }) => {
-            const point = getPointByCoords(pageX - fieldMetrics.left, pageY - fieldMetrics.top);
+            const point = getPointByCoords(
+                pageX - fieldMetrics.left - document.documentElement.scrollLeft,
+                pageY - fieldMetrics.top - document.documentElement.scrollTop
+            );
             setCursor(point);
         },
         [fieldMetrics]
