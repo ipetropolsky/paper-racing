@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Path from './Path';
 import Car from './Car';
-import { calculateStats, FieldPoint, getCurrentTrack, TrackPart } from './utils';
+import { calculateStats, FieldPoint, TrackPart } from './utils';
 import NextMove from './NextMove';
-import { moveAction, undoAction, redoAction, resetAction, PlayerStats } from './model/player';
+import { moveAction, undoAction, redoAction, resetAction, getCurrentTrack, PlayerStats } from './model/player';
 import { goals } from './setup';
 
 type MoveTo = (nextPosition: FieldPoint) => void;

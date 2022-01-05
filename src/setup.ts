@@ -1,9 +1,10 @@
-import { getPoint, theSamePoint } from './utils';
+import { calculateTrack, getPoint, getVector, theSamePoint } from './utils';
 import { FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, Goal } from './constants';
 
 const GOALS_COUNT = 5;
 export const START_POINT = getPoint(0, 0);
 export const FINISH_POINT = getPoint(FIELD_WIDTH_IN_CELLS - 1, FIELD_HEIGHT_IN_CELLS - 1);
+
 const COLLECT_IN_ORDER = [Math.floor(Math.random() * GOALS_COUNT)];
 
 export const goals: Goal[] = [];
@@ -18,3 +19,12 @@ for (let i = 0; i < GOALS_COUNT; i++) {
     }
     goals.push({ id: String(i), left: point[0], top: point[1], number: COLLECT_IN_ORDER.includes(i) ? i + 1 : null });
 }
+
+export const initialPosition = {
+    point: getPoint(...START_POINT),
+    vector: getVector(0, 0),
+    angle: Math.PI / 4,
+};
+
+export const initialTrack = calculateTrack(initialPosition.point, initialPosition.vector, 0, goals);
+initialTrack.angle = initialPosition.angle;

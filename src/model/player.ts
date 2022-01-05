@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
 
-import { calculateTrack, FieldPoint, getCurrentTrack, getVector, TrackPart } from '../utils';
+import { calculateTrack, FieldPoint, getVector, TrackPart } from '../utils';
 import { log } from '../debug';
 import { Goal } from '../constants';
-import { goals } from '../setup';
+import { goals, initialTrack } from '../setup';
 
 const MOVE = 'MOVE';
 const UNDO = 'UNDO';
@@ -57,6 +57,14 @@ export const moveAction = (to: FieldPoint): MoveAction => ({ type: MOVE, payload
 export const undoAction = (): UndoAction => ({ type: UNDO });
 export const redoAction = (): RedoAction => ({ type: REDO });
 export const resetAction = (): ResetAction => ({ type: RESET });
+
+export const getCurrentTrack = (track: TrackPart[], goals: Goal[]): TrackPart => {
+    if (track.length) {
+        const lastMove = track[track.length - 1];
+        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle, goals);
+    }
+    return initialTrack;
+};
 
 const makeMoveState = (state: State, action: MoveAction): State => {
     const { track, future } = state;

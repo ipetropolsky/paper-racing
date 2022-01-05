@@ -53,20 +53,6 @@ export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle 
     return { from, to, vector, angle, speed, distance, goalId };
 };
 
-const initialPoint = getPoint(0, 0);
-const initialVector = getVector(0, 0);
-const initialAngle = Math.PI / 4;
-
-export const getCurrentTrack = (track: TrackPart[], goals: Goal[]): TrackPart => {
-    if (track.length) {
-        const lastMove = track[track.length - 1];
-        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle, goals);
-    }
-    const currentTrack = calculateTrack(initialPoint, initialVector, 0, goals);
-    currentTrack.angle = initialAngle;
-    return currentTrack;
-};
-
 export const calculateStats = (track: TrackPart[], goals: Goal[]): PlayerStats => {
     const moves = track.length;
     const [x, y] = moves ? track[track.length - 1].to : [0, 0];
