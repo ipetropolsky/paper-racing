@@ -1,0 +1,22 @@
+.cell {
+    width: calc(var(--cell-size) + 1px);
+    height: calc(var(--cell-size) + 1px);
+    box-sizing: border-box;
+    position: absolute;
+    margin: var(--border-width-negative) 0 0 var(--border-width-negative);
+}
+
+.cell_finish {
+    --finish-color: #aaa;
+    --finish-size: 14px;
+    --half-finish-size: calc(var(--finish-size) / 2);
+    --half-finish-size-negative: calc(-1 * var(--half-finish-size));
+    border: 1px solid var(--finish-color);
+    background-image: linear-gradient(45deg, var(--finish-color) 25%, transparent 25%),
+        linear-gradient(135deg, var(--finish-color) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--finish-color) 75%),
+        linear-gradient(135deg, transparent 75%, var(--finish-color) 75%);
+    background-size: var(--finish-size) var(--finish-size);
+    background-position: 0 0, var(--half-finish-size) 0, var(--half-finish-size) var(--half-finish-size-negative),
+        0 var(--half-finish-size);
+}

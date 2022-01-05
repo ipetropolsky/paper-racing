@@ -7,7 +7,8 @@ import { FieldPoint, getBoundingClientRect, getPointByCoords } from './utils';
 import './Field.css';
 import usePlayer from './usePlayer';
 import Score from './Score';
-import { goals } from './setup';
+import Cell, { CellType } from './Cell';
+import { FINISH_POINT, goals } from './setup';
 
 const Z_KEY = 90;
 const SPACE_KEY = 32;
@@ -109,6 +110,7 @@ const Field: VFC = () => {
                     <Point type={PointType.ERROR} x={error[0]} y={error[1]} inAction key={`${error[0]}${error[1]}`} />
                 )}
                 {renderPlayerOne()}
+                <Cell type={CellType.FINISH} point={FINISH_POINT} />
             </div>
             <Score stats={statsPlayerOne} />
         </div>
