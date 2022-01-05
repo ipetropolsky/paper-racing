@@ -3,7 +3,7 @@ import { VFC } from 'react';
 import { CELL_SIZE } from './constants';
 
 import './Cell.css';
-import { FieldPoint } from './utils';
+import { FieldPoint } from './model/types';
 
 export enum CellType {
     FINISH = 'finish',

@@ -1,5 +1,6 @@
-import { calculateTrack, getPoint, getVector, theSamePoint } from './utils';
-import { FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, Goal } from './constants';
+import { getPoint, getVector, theSamePoint } from './utils';
+import { FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS } from './constants';
+import { Goal } from './model/types';
 
 const GOALS_COUNT = 5;
 export const START_POINT = getPoint(0, 0);
@@ -25,6 +26,3 @@ export const initialPosition = {
     vector: getVector(0, 0),
     angle: Math.PI / 4,
 };
-
-export const initialTrack = calculateTrack(initialPosition.point, initialPosition.vector, 0, goals);
-initialTrack.angle = initialPosition.angle;

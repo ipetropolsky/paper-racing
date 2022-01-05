@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
 
-import { calculateTrack, FieldPoint, getVector, TrackPart } from '../utils';
+import { getPoint, getTrackPart, getVector, theSamePoint } from '../utils';
+import { FINISH_POINT, goals, initialPosition } from '../setup';
+import { FieldPoint, FieldVector, Goal, PlayerStats, TrackPart } from './types';
 import { log } from '../debug';
-import { Goal } from '../constants';
-import { goals, initialTrack } from '../setup';
 
 const MOVE = 'MOVE';
 const UNDO = 'UNDO';
@@ -32,14 +32,51 @@ interface ResetAction extends AnyAction {
 
 type Actions = MoveAction | UndoAction | RedoAction | ResetAction;
 
-export interface PlayerStats {
-    moves: number;
-    speed: number;
-    averageSpeed: number;
-    totalDistance: number;
-    collectedGoals: Goal[];
-    finished: boolean;
-}
+const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle = 0, goals: Goal[]): TrackPart => {
+    const [x, y] = from;
+    const [dx, dy] = vector;
+    const to = getPoint(x + dx, y + dy);
+    const speed = Math.max(Math.abs(dx), Math.abs(dy));
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    let angle = Math.atan(dy / dx) + (dx < 0 ? Math.PI : 0);
+    while (Math.abs(lastAngle - angle) > Math.PI) {
+        angle += (lastAngle > angle ? 1 : -1) * 2 * Math.PI;
+    }
+    const goalId = goals.find(({ left, top }) => left === to[0] && top === to[1])?.id || null;
+    return getTrackPart({ from, to, vector, angle, speed, distance, goalId });
+};
+
+const initialTrack = getTrackPart({
+    from: initialPosition.point,
+    to: initialPosition.point,
+    vector: initialPosition.vector,
+    angle: initialPosition.angle,
+});
+
+export const getCurrentTrack = (track: TrackPart[], goals: Goal[]): TrackPart => {
+    if (track.length) {
+        const lastMove = track[track.length - 1];
+        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle, goals);
+    }
+    return initialTrack;
+};
+
+export const calculateStats = (track: TrackPart[], goals: Goal[]): PlayerStats => {
+    const moves = track.length;
+    const point = moves ? track[track.length - 1].to : initialPosition.point;
+    const totalDistance = moves ? track.reduce((result, { distance }) => result + distance, 0) : 0;
+    const averageSpeed = moves ? totalDistance / moves : 0;
+    const speed = moves ? track[track.length - 1].distance : 0;
+    const collectedGoals = track.reduce((result: Goal[], { goalId }) => {
+        if (goalId) {
+            const goal = goals.find(({ id }) => id === goalId);
+            goal && !result.includes(goal) && result.push(goal);
+        }
+        return result;
+    }, []);
+    const finished = collectedGoals.length === goals.length && theSamePoint(point, FINISH_POINT);
+    return { moves, speed, averageSpeed, totalDistance, collectedGoals, finished };
+};
 
 interface State {
     error: FieldPoint | null;
@@ -57,14 +94,6 @@ export const moveAction = (to: FieldPoint): MoveAction => ({ type: MOVE, payload
 export const undoAction = (): UndoAction => ({ type: UNDO });
 export const redoAction = (): RedoAction => ({ type: REDO });
 export const resetAction = (): ResetAction => ({ type: RESET });
-
-export const getCurrentTrack = (track: TrackPart[], goals: Goal[]): TrackPart => {
-    if (track.length) {
-        const lastMove = track[track.length - 1];
-        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle, goals);
-    }
-    return initialTrack;
-};
 
 const makeMoveState = (state: State, action: MoveAction): State => {
     const { track, future } = state;

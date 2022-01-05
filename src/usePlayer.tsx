@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Path from './Path';
 import Car from './Car';
-import { calculateStats, FieldPoint, TrackPart } from './utils';
 import NextMove from './NextMove';
-import { moveAction, undoAction, redoAction, resetAction, getCurrentTrack, PlayerStats } from './model/player';
+import { moveAction, undoAction, redoAction, resetAction, getCurrentTrack, calculateStats } from './model/player';
 import { goals } from './setup';
+import { FieldPoint, PlayerStats, TrackPart } from './model/types';
 
 type MoveTo = (nextPosition: FieldPoint) => void;
 type Undo = () => void;
