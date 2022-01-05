@@ -1,10 +1,11 @@
 import { VFC } from 'react';
 
-import { CELL_SIZE, FIELD_WIDTH_IN_CELLS, goals } from './constants';
+import { CELL_SIZE, FIELD_WIDTH_IN_CELLS } from './constants';
 
 import './Path.css';
 import { PlayerStats } from './model/player';
 import { PointStatic, PointType } from './Point';
+import { goals } from './setup';
 
 interface ScoreProps {
     stats: PlayerStats;

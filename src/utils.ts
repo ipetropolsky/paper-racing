@@ -1,4 +1,4 @@
-import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, Goal, goals } from './constants';
+import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, Goal } from './constants';
 import { PlayerStats } from './model/player';
 
 export type FieldPoint = [number, number];
@@ -30,6 +30,7 @@ export const getBoundingClientRect = (element: Element): BoundingClientRect => {
 
 export const getPoint = (x: number, y: number): FieldPoint => [x, y];
 export const getVector = (dx: number, dy: number): FieldVector => [dx, dy];
+export const theSamePoint = (a: FieldPoint, b: FieldPoint): boolean => a[0] === b[0] && a[1] === b[1];
 
 export const getSafePoint = (x: number, y: number): FieldPoint =>
     getPoint(Math.max(0, Math.min(x, FIELD_WIDTH_IN_CELLS - 1)), Math.max(0, Math.min(y, FIELD_HEIGHT_IN_CELLS - 1)));
@@ -38,7 +39,7 @@ export const getPointByCoords = (left: number, top: number): FieldPoint => {
     return getSafePoint(Math.floor(left / CELL_SIZE), Math.floor(top / CELL_SIZE));
 };
 
-export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle = 0): TrackPart => {
+export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle = 0, goals: Goal[]): TrackPart => {
     const [x, y] = from;
     const [dx, dy] = vector;
     const to = getPoint(x + dx, y + dy);
@@ -56,17 +57,17 @@ const initialPoint = getPoint(0, 0);
 const initialVector = getVector(0, 0);
 const initialAngle = Math.PI / 4;
 
-export const getCurrentTrack = (track: TrackPart[]): TrackPart => {
+export const getCurrentTrack = (track: TrackPart[], goals: Goal[]): TrackPart => {
     if (track.length) {
         const lastMove = track[track.length - 1];
-        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle);
+        return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle, goals);
     }
-    const currentTrack = calculateTrack(initialPoint, initialVector, 0);
+    const currentTrack = calculateTrack(initialPoint, initialVector, 0, goals);
     currentTrack.angle = initialAngle;
     return currentTrack;
 };
 
-export const calculateStats = (track: TrackPart[]): PlayerStats => {
+export const calculateStats = (track: TrackPart[], goals: Goal[]): PlayerStats => {
     const moves = track.length;
     const [x, y] = moves ? track[track.length - 1].to : [0, 0];
     const totalDistance = moves ? track.reduce((result, { distance }) => result + distance, 0) : 0;

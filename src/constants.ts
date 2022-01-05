@@ -32,16 +32,3 @@ export interface Goal {
     top: number;
     number: number | null;
 }
-
-export const goals: Goal[] = [];
-
-const GOALS_COUNT = 5;
-const index = Math.floor(Math.random() * GOALS_COUNT);
-for (let i = 0; i < GOALS_COUNT; i++) {
-    goals.push({
-        id: String(i),
-        left: Math.floor(Math.random() * FIELD_WIDTH_IN_CELLS),
-        top: Math.floor(Math.random() * FIELD_HEIGHT_IN_CELLS),
-        number: index === i ? i + 1 : null,
-    });
-}

@@ -3,6 +3,7 @@ import { AnyAction } from 'redux';
 import { calculateTrack, FieldPoint, getCurrentTrack, getVector, TrackPart } from '../utils';
 import { log } from '../debug';
 import { Goal } from '../constants';
+import { goals } from '../setup';
 
 const MOVE = 'MOVE';
 const UNDO = 'UNDO';
@@ -59,14 +60,14 @@ export const resetAction = (): ResetAction => ({ type: RESET });
 
 const makeMoveState = (state: State, action: MoveAction): State => {
     const { track, future } = state;
-    const current = getCurrentTrack(track);
+    const current = getCurrentTrack(track, goals);
     const [fromX, fromY] = current.from;
     const [toX, toY] = action.payload.to;
     if (fromX === toX && fromY === toY) {
         return state;
     }
     const vector = getVector(toX - fromX, toY - fromY);
-    const lastMove = calculateTrack(current.from, vector, current.angle);
+    const lastMove = calculateTrack(current.from, vector, current.angle, goals);
     log('Move', lastMove);
     if (Math.abs(lastMove.vector[0] - current.vector[0]) > 1 || Math.abs(lastMove.vector[1] - current.vector[1]) > 1) {
         return { ...state, error: { ...lastMove.to } };

@@ -1,19 +1,13 @@
 import { VFC, useCallback, useEffect, useRef, useState, MouseEventHandler } from 'react';
 
-import {
-    CELL_SIZE,
-    FIELD_WIDTH_IN_CELLS,
-    FIELD_HEIGHT_IN_CELLS,
-    defaultRect,
-    goals,
-    BoundingClientRect,
-} from './constants';
+import { CELL_SIZE, FIELD_WIDTH_IN_CELLS, FIELD_HEIGHT_IN_CELLS, defaultRect, BoundingClientRect } from './constants';
 import Point, { PointType } from './Point';
 import { FieldPoint, getBoundingClientRect, getPointByCoords } from './utils';
 
 import './Field.css';
 import usePlayer from './usePlayer';
 import Score from './Score';
+import { goals } from './setup';
 
 const Z_KEY = 90;
 const SPACE_KEY = 32;
