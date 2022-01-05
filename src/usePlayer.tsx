@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Path from './Path';
 import Car from './Car';
-import { calculateStats, FieldPoint, TrackPart } from './utils';
+import { calculateStats, FieldPoint, getCurrentTrack, TrackPart } from './utils';
 import NextMove from './NextMove';
 import { moveAction, undoAction, redoAction, resetAction, PlayerStats } from './model/player';
 
@@ -15,7 +15,8 @@ type Render = () => ReactNode;
 
 const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, TrackPart, PlayerStats, FieldPoint | null] => {
     const dispatch = useDispatch();
-    const { error, track, current } = useSelector((state) => state.player);
+    const { error, track } = useSelector((state) => state.player);
+    const current = getCurrentTrack(track);
     const lastMove = track[track.length - 1];
     const [fromX, fromY] = current.from;
     const [toX, toY] = current.to;

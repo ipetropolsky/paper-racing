@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 
-import { calculateTrack, FieldPoint, getPoint, getVector, TrackPart } from '../utils';
+import { calculateTrack, FieldPoint, getCurrentTrack, getVector, TrackPart } from '../utils';
 import { log } from '../debug';
 import { Goal } from '../constants';
 
@@ -42,17 +42,12 @@ export interface PlayerStats {
 
 interface State {
     error: FieldPoint | null;
-    current: TrackPart;
     track: TrackPart[];
     future: TrackPart[];
 }
 
-const initialPosition = getPoint(0, 0);
-const initialVector = getVector(0, 0);
-
 const initialState: State = {
     error: null,
-    current: { ...calculateTrack(initialPosition, initialVector), angle: Math.PI / 4 },
     track: [],
     future: [],
 };
@@ -63,55 +58,51 @@ export const redoAction = (): RedoAction => ({ type: REDO });
 export const resetAction = (): ResetAction => ({ type: RESET });
 
 const makeMoveState = (state: State, action: MoveAction): State => {
-    const { track, current, future } = state;
+    const { track, future } = state;
+    const current = getCurrentTrack(track);
     const [fromX, fromY] = current.from;
     const [toX, toY] = action.payload.to;
     if (fromX === toX && fromY === toY) {
         return state;
     }
     const vector = getVector(toX - fromX, toY - fromY);
-    const move = calculateTrack(current.from, vector, current.angle);
-    const nextMove = calculateTrack(action.payload.to, vector, move.angle);
-    log('Move', move);
-    if (Math.abs(move.vector[0] - current.vector[0]) > 1 || Math.abs(move.vector[1] - current.vector[1]) > 1) {
-        return { ...state, error: { ...move.to } };
+    const lastMove = calculateTrack(current.from, vector, current.angle);
+    log('Move', lastMove);
+    if (Math.abs(lastMove.vector[0] - current.vector[0]) > 1 || Math.abs(lastMove.vector[1] - current.vector[1]) > 1) {
+        return { ...state, error: { ...lastMove.to } };
     }
-    const newTrack = track.concat({ ...move });
     return {
         ...state,
         error: null,
-        track: newTrack,
-        current: nextMove,
+        track: track.concat({ ...lastMove }),
         future: action.meta?.doNotClearFuture ? future : [],
     };
 };
 
 const makeUndoState = (state: State) => {
-    const { track, current, future } = state;
+    const { track, future } = state;
     if (track.length) {
-        log('Undo', current);
         const lastMove = track[track.length - 1];
+        log('Undo', lastMove);
         return {
             ...state,
             error: null,
             track: track.slice(0, track.length - 1),
-            current: { ...lastMove },
-            future: [{ ...current }, ...future],
+            future: [{ ...lastMove }, ...future],
         };
     }
     return state;
 };
 
 const makeRedoState = (state: State) => {
-    const { track, current, future } = state;
+    const { track, future } = state;
     if (future.length) {
-        const nextMove = future[0];
-        log('Redo', nextMove);
+        const lastMove = future[0];
+        log('Redo', lastMove);
         return {
             ...state,
             error: null,
-            track: track.concat({ ...current }),
-            current: { ...nextMove },
+            track: track.concat({ ...lastMove }),
             future: future.slice(1),
         };
     }
