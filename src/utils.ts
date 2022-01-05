@@ -1,4 +1,5 @@
-import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, goals } from './constants';
+import { BoundingClientRect, CELL_SIZE, FIELD_HEIGHT_IN_CELLS, FIELD_WIDTH_IN_CELLS, Goal, goals } from './constants';
+import { PlayerStats } from './model/player';
 
 export type FieldPoint = [number, number];
 export type FieldVector = [number, number];
@@ -48,13 +49,22 @@ export const calculateTrack = (from: FieldPoint, vector: FieldVector, lastAngle 
         angle += (lastAngle > angle ? 1 : -1) * 2 * Math.PI;
     }
     const goalId = goals.find(({ left, top }) => left === to[0] && top === to[1])?.id || null;
-    return {
-        from,
-        to,
-        vector,
-        angle,
-        speed,
-        distance,
-        goalId,
-    };
+    return { from, to, vector, angle, speed, distance, goalId };
+};
+
+export const calculateStats = (track: TrackPart[]): PlayerStats => {
+    const moves = track.length;
+    const [x, y] = moves ? track[track.length - 1].to : [0, 0];
+    const totalDistance = moves ? track.reduce((result, { distance }) => result + distance, 0) : 0;
+    const averageSpeed = moves ? totalDistance / moves : 0;
+    const speed = moves ? track[track.length - 1].distance : 0;
+    const collectedGoals = track.reduce((result: Goal[], { goalId }) => {
+        if (goalId) {
+            const goal = goals.find(({ id }) => id === goalId);
+            goal && !result.includes(goal) && result.push(goal);
+        }
+        return result;
+    }, []);
+    const finished = collectedGoals.length === goals.length && x === 0 && y === 0;
+    return { moves, speed, averageSpeed, totalDistance, collectedGoals, finished };
 };

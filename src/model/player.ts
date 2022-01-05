@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 
 import { calculateTrack, FieldPoint, getPoint, getVector, TrackPart } from '../utils';
 import { log } from '../debug';
+import { Goal } from '../constants';
 
 const MOVE = 'MOVE';
 const UNDO = 'UNDO';
@@ -29,6 +30,15 @@ interface ResetAction extends AnyAction {
 }
 
 type Actions = MoveAction | UndoAction | RedoAction | ResetAction;
+
+export interface PlayerStats {
+    moves: number;
+    speed: number;
+    averageSpeed: number;
+    totalDistance: number;
+    collectedGoals: Goal[];
+    finished: boolean;
+}
 
 interface State {
     error: FieldPoint | null;
@@ -66,10 +76,11 @@ const makeMoveState = (state: State, action: MoveAction): State => {
     if (Math.abs(move.vector[0] - current.vector[0]) > 1 || Math.abs(move.vector[1] - current.vector[1]) > 1) {
         return { ...state, error: { ...move.to } };
     }
+    const newTrack = track.concat({ ...move });
     return {
         ...state,
         error: null,
-        track: track.concat({ ...move }),
+        track: newTrack,
         current: nextMove,
         future: action.meta?.doNotClearFuture ? future : [],
     };

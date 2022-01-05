@@ -13,6 +13,7 @@ import { FieldPoint, getBoundingClientRect, getPointByCoords } from './utils';
 
 import './Field.css';
 import usePlayer from './usePlayer';
+import Score from './Score';
 
 const Z_KEY = 90;
 const SPACE_KEY = 32;
@@ -33,7 +34,7 @@ const Field: VFC = () => {
         redoPlayerOne,
         resetPlayerOne,
         lastMovePlayerOne,
-        goalsPlayerOne,
+        statsPlayerOne,
         error,
     ] = usePlayer('#4d4dff');
 
@@ -67,7 +68,7 @@ const Field: VFC = () => {
         return () => {
             document.removeEventListener('keydown', keyDownHandler);
         };
-    }, [redoPlayerOne, resetPlayerOne, undoPlayerOne]);
+    }, [redoPlayerOne, resetPlayerOne, statsPlayerOne, undoPlayerOne]);
 
     const onClick = useCallback(
         ({ pageX, pageY }) => {
@@ -85,7 +86,7 @@ const Field: VFC = () => {
         [fieldMetrics]
     );
 
-    const collectedGoalIds = goalsPlayerOne.map(({ id }) => id);
+    const collectedGoalIds = statsPlayerOne.collectedGoals.map(({ id }) => id);
     return (
         <div style={{ position: 'relative', margin: 30 }}>
             <div className="field" ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
@@ -107,6 +108,7 @@ const Field: VFC = () => {
                 )}
                 {renderPlayerOne()}
             </div>
+            <Score stats={statsPlayerOne} />
         </div>
     );
 };
