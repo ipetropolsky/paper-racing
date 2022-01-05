@@ -61,7 +61,9 @@ export const getCurrentTrack = (track: TrackPart[]): TrackPart => {
         const lastMove = track[track.length - 1];
         return calculateTrack(lastMove.to, lastMove.vector, lastMove.angle);
     }
-    return calculateTrack(initialPoint, initialVector, initialAngle);
+    const currentTrack = calculateTrack(initialPoint, initialVector, 0);
+    currentTrack.angle = initialAngle;
+    return currentTrack;
 };
 
 export const calculateStats = (track: TrackPart[]): PlayerStats => {
