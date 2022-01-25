@@ -6,11 +6,11 @@
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "lint": "yarn eslint src tools",
+    "ts-check": "tsc -p tsconfig.json --noEmit",
+    "lint": "yarn eslint src tools && yarn ts-check",
     "test": "yarn jest",
     "postinstall": "yarn hooks",
     "hooks": "ln -sf $(pwd)/githooks/* .git/hooks || true",
-    "ts-check": "tsc -p tsconfig.json --noEmit",
     "predeploy": "yarn build",
     "deploy": "yarn gh-pages -d build"
   },
