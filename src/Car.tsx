@@ -3,7 +3,7 @@ import { VFC } from 'react';
 import { CELL_SIZE } from './constants';
 import { FieldPoint } from './model/types';
 
-import './Car.css';
+import styles from './Car.module.css';
 
 interface CarProps {
     point: FieldPoint;
@@ -14,7 +14,7 @@ interface CarProps {
 const Car: VFC<CarProps> = ({ point: [x, y], angle, color }) => {
     return (
         <div
-            className="car"
+            className={styles.car}
             style={{
                 left: x * CELL_SIZE,
                 top: y * CELL_SIZE,

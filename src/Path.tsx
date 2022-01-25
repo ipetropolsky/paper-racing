@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { CELL_SIZE } from './constants';
 import { FieldPoint } from './model/types';
 
-import './Path.css';
+import styles from './Path.module.css';
 
 interface PathProps {
     point: FieldPoint;
@@ -16,7 +16,7 @@ interface PathProps {
 
 const Path: VFC<PathProps> = ({ point: [x, y], angle, distance, color, last = false }) => (
     <div
-        className={classnames('path', { [`path_last`]: last })}
+        className={classnames(styles.path, { [styles.pathLast]: last })}
         style={{
             left: x * CELL_SIZE,
             top: y * CELL_SIZE,

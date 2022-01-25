@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { CELL_SIZE } from './constants';
 import { FieldPoint } from './model/types';
 
-import './Point.css';
+import styles from './Point.module.css';
 
 export enum PointType {
     CURSOR = 'cursor',
@@ -23,10 +23,10 @@ interface PointProps extends PointStaticProps {
     inAction?: boolean;
 }
 
-const colorByType = {
-    [PointType.CURSOR]: '#dddddd',
-    [PointType.GOAL]: '#ffca28',
-    [PointType.ERROR]: '#bf360c',
+const classByType = {
+    [PointType.CURSOR]: styles.pointCursor,
+    [PointType.GOAL]: styles.pointGoal,
+    [PointType.ERROR]: styles.pointError,
 };
 
 const Point: VFC<PointProps> = ({ type, point: [x, y], inAction = false, collected = false, children }) => {
@@ -37,15 +37,13 @@ const Point: VFC<PointProps> = ({ type, point: [x, y], inAction = false, collect
 
     return (
         <span
-            className={classnames(`point point_${type}`, {
-                'point_in-action': inActionClass,
-                [`point_collected`]: collected,
+            className={classnames(`${styles.point} ${classByType[type]}`, {
+                [styles.pointInAction]: inActionClass,
+                [styles.pointCollected]: collected,
             })}
             style={{
                 left: x * CELL_SIZE,
                 top: y * CELL_SIZE,
-                backgroundColor: colorByType[type],
-                borderColor: colorByType[type],
             }}
         >
             {children}
@@ -61,14 +59,10 @@ export const PointStatic: VFC<PointStaticProps> = ({ type, collected = false, ch
 
     return (
         <span
-            className={classnames(`point point_static point_${type}`, {
-                'point_in-action': inActionClass,
-                [`point_collected`]: collected,
+            className={classnames(`${styles.point} ${styles.pointStatic} ${classByType[type]}`, {
+                [styles.pointInAction]: inActionClass,
+                [styles.pointCollected]: collected,
             })}
-            style={{
-                backgroundColor: colorByType[type],
-                borderColor: colorByType[type],
-            }}
         >
             {children}
         </span>

@@ -9,7 +9,7 @@ import Cell, { CellType } from './Cell';
 import { FINISH_POINT, goals } from './setup';
 import { BoundingClientRect, FieldPoint } from './model/types';
 
-import './Field.css';
+import styles from './Field.module.css';
 
 const fieldStyle = {
     width: FIELD_WIDTH_IN_CELLS * CELL_SIZE - 1,
@@ -90,7 +90,7 @@ const Field: VFC = () => {
     const collectedGoalIds = statsPlayerOne.collectedGoals.map(({ id }) => id);
     return (
         <div style={{ position: 'relative', margin: 30 }}>
-            <div className="field" ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
+            <div className={styles.field} ref={fieldRef} onMouseMove={onMouseMove} onClick={onClick} style={fieldStyle}>
                 {cursor && <Point point={cursor} type={PointType.CURSOR} />}
                 {goals.map(({ id, point, number }) => (
                     <Point

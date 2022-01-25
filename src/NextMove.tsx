@@ -3,7 +3,7 @@ import { VFC } from 'react';
 import { CELL_SIZE } from './constants';
 import { FieldPoint } from './model/types';
 
-import './NextMove.css';
+import styles from './NextMove.module.css';
 
 interface NextMoveProps {
     point: FieldPoint;
@@ -11,7 +11,7 @@ interface NextMoveProps {
 
 const NextMove: VFC<NextMoveProps> = ({ point: [x, y] }) => (
     <div
-        className="next-move"
+        className={styles.nextMove}
         style={{
             left: x * CELL_SIZE,
             top: y * CELL_SIZE,

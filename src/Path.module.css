@@ -7,7 +7,7 @@
     margin: var(--half-cell-size) 0 0 var(--half-cell-size);
 }
 
-.path_last {
+.pathLast {
     opacity: 1;
 }
 
@@ -24,7 +24,7 @@
     transform: translate(-50%, -50%);
 }
 
-.path_last:before {
+.pathLast:before {
     content: none;
     left: 100%;
     top: 100%;

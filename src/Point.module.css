@@ -15,18 +15,33 @@
     line-height: var(--point-size);
 }
 
-.point_collected {
+.pointCursor {
+    background-color: #ddd;
+    border-color: #ddd;
+}
+
+.pointGoal {
+    background-color: #ffca28;
+    border-color: #ffca28;
+}
+
+.pointError {
+    background-color: #bf360c;
+    border-color: #bf360c;
+}
+
+.pointCollected {
     outline: 2px solid var(--point-border-color);
 }
 
-.point_static {
+.pointStatic {
     position: static;
     display: inline-block;
     margin: 0 0 0 10px;
     vertical-align: middle;
 }
 
-.point_in-action {
+.pointInAction {
     animation-name: point;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(0.34, 0.86, 0.66, 0.22);
@@ -50,13 +65,13 @@
     pointer-events: none;
 }
 
-.point_in-action:after {
+.pointInAction:after {
     visibility: visible;
     opacity: 0;
     transform: translate(-50%, -50%) scale(4);
 }
 
-.point_goal.point_in-action:after {
+.pointGoal.pointInAction:after {
     transform: translate(-50%, -50%) scale(4);
 }
 

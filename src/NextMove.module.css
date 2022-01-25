@@ -1,4 +1,4 @@
-.next-move {
+.nextMove {
     position: absolute;
     width: calc(5 * var(--point-size));
     height: calc(5 * var(--point-size));

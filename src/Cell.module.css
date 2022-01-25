@@ -6,7 +6,7 @@
     margin: var(--border-width-negative) 0 0 var(--border-width-negative);
 }
 
-.cell_finish {
+.cellFinish {
     --finish-color: #aaa;
     --finish-size: 14px;
     --half-finish-size: calc(var(--finish-size) / 2);

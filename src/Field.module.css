@@ -8,19 +8,3 @@
     z-index: 1;
     cursor: pointer;
 }
-
-.score {
-    width: 350px;
-    font-size: 36px;
-    line-height: 1;
-    font-family: 'PT Sans Narrow';
-    font-weight: bold;
-    position: absolute;
-    margin-left: 40px;
-    top: 20px;
-    pointer-events: none;
-}
-
-.score p {
-    margin: 0 0 15px 0;
-}

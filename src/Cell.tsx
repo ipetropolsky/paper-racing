@@ -3,7 +3,7 @@ import { VFC } from 'react';
 import { CELL_SIZE } from './constants';
 import { FieldPoint } from './model/types';
 
-import './Cell.css';
+import styles from './Cell.module.css';
 
 export enum CellType {
     FINISH = 'finish',
@@ -14,9 +14,13 @@ interface CellProps {
     point: FieldPoint;
 }
 
+const typeToClass = {
+    [CellType.FINISH]: styles.cell_finish,
+};
+
 const CellMove: VFC<CellProps> = ({ type, point: [x, y] }) => (
     <div
-        className={`cell cell_${type}`}
+        className={`${styles.cell} ${typeToClass[type]}`}
         style={{
             left: x * CELL_SIZE,
             top: y * CELL_SIZE,
