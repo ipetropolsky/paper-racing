@@ -27,13 +27,13 @@ export const getPointByCoords = (x: number, y: number): FieldPoint => {
 };
 
 export const getTrackPart = ({
-    from = getPoint(0, 0),
-    to = getPoint(0, 0),
+    point = getPoint(0, 0),
+    target = getPoint(0, 0),
     vector = getVector(0, 0),
     angle = Math.PI / 4,
     speed = 0,
     distance = 0,
     goalId = null,
 }: Partial<TrackPart>): TrackPart => {
-    return { from, to, vector, angle, speed, distance, goalId };
+    return { point, target, vector, angle, speed, distance, goalId };
 };

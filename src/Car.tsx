@@ -1,23 +1,23 @@
 import { VFC } from 'react';
 
 import { CELL_SIZE } from './constants';
+import { FieldPoint } from './model/types';
 
 import './Car.css';
 
 interface CarProps {
-    left: number;
-    top: number;
+    point: FieldPoint;
     angle: number;
     color: string;
 }
 
-const Car: VFC<CarProps> = ({ left, top, angle, color }) => {
+const Car: VFC<CarProps> = ({ point: [x, y], angle, color }) => {
     return (
         <div
             className="car"
             style={{
-                left: left * CELL_SIZE,
-                top: top * CELL_SIZE,
+                left: x * CELL_SIZE,
+                top: y * CELL_SIZE,
                 transform: `rotate(${angle}rad)`,
             }}
         >

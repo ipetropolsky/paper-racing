@@ -1,6 +1,8 @@
 import { VFC, useEffect, useState, ReactNode } from 'react';
+import classnames from 'classnames';
 
 import { CELL_SIZE } from './constants';
+import { FieldPoint } from './model/types';
 
 import './Point.css';
 
@@ -17,35 +19,34 @@ interface PointStaticProps {
 }
 
 interface PointProps extends PointStaticProps {
-    x: number;
-    y: number;
+    point: FieldPoint;
     inAction?: boolean;
 }
 
 const colorByType = {
     [PointType.CURSOR]: '#dddddd',
-    [PointType.GOAL]: '#FFCA28',
-    [PointType.ERROR]: '#BF360C',
+    [PointType.GOAL]: '#ffca28',
+    [PointType.ERROR]: '#bf360c',
 };
 
-const Point: VFC<PointProps> = ({ type, x, y, inAction = false, collected = false, children }) => {
+const Point: VFC<PointProps> = ({ type, point: [x, y], inAction = false, collected = false, children }) => {
     const [inActionClass, setInActionClass] = useState(false);
     useEffect(() => {
         setInActionClass(inAction);
     }, [inAction]);
 
-    const style = {
-        left: x * CELL_SIZE,
-        top: y * CELL_SIZE,
-        backgroundColor: colorByType[type],
-        borderColor: colorByType[type],
-    };
     return (
         <span
-            className={`point point_${type} ${inActionClass ? 'point_in-action' : ''} ${
-                collected ? 'point_collected' : ''
-            }`}
-            style={style}
+            className={classnames(`point point_${type}`, {
+                'point_in-action': inActionClass,
+                [`point_collected`]: collected,
+            })}
+            style={{
+                left: x * CELL_SIZE,
+                top: y * CELL_SIZE,
+                backgroundColor: colorByType[type],
+                borderColor: colorByType[type],
+            }}
         >
             {children}
         </span>
@@ -58,16 +59,16 @@ export const PointStatic: VFC<PointStaticProps> = ({ type, collected = false, ch
         setInActionClass(type === PointType.GOAL);
     }, [type]);
 
-    const style = {
-        backgroundColor: colorByType[type],
-        borderColor: colorByType[type],
-    };
     return (
         <span
-            className={`point point_${type} point_static ${inActionClass ? 'point_in-action' : ''} ${
-                collected ? 'point_collected' : ''
-            }`}
-            style={style}
+            className={classnames(`point point_static point_${type}`, {
+                'point_in-action': inActionClass,
+                [`point_collected`]: collected,
+            })}
+            style={{
+                backgroundColor: colorByType[type],
+                borderColor: colorByType[type],
+            }}
         >
             {children}
         </span>

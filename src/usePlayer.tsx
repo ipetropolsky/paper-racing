@@ -19,8 +19,6 @@ const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, TrackPart
     const { error, track } = useSelector((state) => state.player);
     const current = getCurrentTrack(track, goals);
     const lastMove = track[track.length - 1];
-    const [fromX, fromY] = current.from;
-    const [toX, toY] = current.to;
 
     const moveTo: MoveTo = (nextPosition: FieldPoint): void => {
         dispatch(moveAction(nextPosition));
@@ -42,12 +40,12 @@ const usePlayer = (color: string): [MoveTo, Render, Undo, Redo, Reset, TrackPart
 
     const render: Render = () => (
         <>
-            {current.from && <Car left={fromX} top={fromY} angle={current.angle} color={color} />}
-            {track.map(({ from: [x, y], angle, distance }, index) => {
-                return <Path key={index} x={x} y={y} angle={angle} distance={distance} color={color} />;
+            {current.point && <Car point={current.point} angle={current.angle} color={color} />}
+            {track.map(({ point, angle, distance }, index) => {
+                return <Path key={index} point={point} angle={angle} distance={distance} color={color} />;
             })}
-            <Path x={fromX} y={fromY} angle={current.angle} distance={current.distance} color="#ddd" last />
-            <NextMove x={toX} y={toY} />
+            <Path point={current.point} angle={current.angle} distance={current.distance} color="#ddd" last />
+            <NextMove point={current.target} />
         </>
     );
     return [moveTo, render, undo, redo, reset, lastMove, stats, error];

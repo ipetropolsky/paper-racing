@@ -2,8 +2,8 @@ export type FieldPoint = [number, number];
 export type FieldVector = [number, number];
 
 export interface TrackPart {
-    from: FieldPoint;
-    to: FieldPoint;
+    point: FieldPoint;
+    target: FieldPoint;
     vector: FieldVector;
     angle: number;
     speed: number;
@@ -24,8 +24,7 @@ export interface BoundingClientRect {
 
 export interface Goal {
     id: string;
-    left: number;
-    top: number;
+    point: FieldPoint;
     number: number | null;
 }
 

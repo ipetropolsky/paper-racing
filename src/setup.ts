@@ -18,7 +18,7 @@ for (let i = 0; i < GOALS_COUNT; i++) {
             Math.floor(Math.random() * FIELD_HEIGHT_IN_CELLS)
         );
     }
-    goals.push({ id: String(i), left: point[0], top: point[1], number: COLLECT_IN_ORDER.includes(i) ? i + 1 : null });
+    goals.push({ id: String(i), point, number: COLLECT_IN_ORDER.includes(i) ? i + 1 : null });
 }
 
 export const initialPosition = {
