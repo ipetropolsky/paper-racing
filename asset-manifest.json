@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/paper-racing/static/css/main.81703cf7.css",
-    "main.js": "/paper-racing/static/js/main.730ad365.js",
+    "main.css": "/paper-racing/static/css/main.bf5975fb.css",
+    "main.js": "/paper-racing/static/js/main.1ad42927.js",
     "index.html": "/paper-racing/index.html",
-    "main.81703cf7.css.map": "/paper-racing/static/css/main.81703cf7.css.map",
-    "main.730ad365.js.map": "/paper-racing/static/js/main.730ad365.js.map"
+    "main.bf5975fb.css.map": "/paper-racing/static/css/main.bf5975fb.css.map",
+    "main.1ad42927.js.map": "/paper-racing/static/js/main.1ad42927.js.map"
   },
   "entrypoints": [
-    "static/css/main.81703cf7.css",
-    "static/js/main.730ad365.js"
+    "static/css/main.bf5975fb.css",
+    "static/js/main.1ad42927.js"
   ]
 }
